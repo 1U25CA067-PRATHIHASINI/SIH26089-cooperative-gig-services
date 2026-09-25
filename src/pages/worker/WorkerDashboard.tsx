@@ -1,3 +1,4 @@
+import { BookingStatus } from '../../types';
 import { useApp } from '../../store/AppContext';
 import { useToast } from '../../components/Toast';
 import { CalendarCheck, Wallet, Star, Clock, MapPin, FileText, CheckCircle, XCircle } from 'lucide-react';
@@ -29,7 +30,7 @@ export default function WorkerDashboard() {
   const upcomingJobs = state.bookings.filter((b) => b.workerId === worker.id && b.status !== 'completed' && b.status !== 'cancelled');
   const earnings = state.bookings.filter((b) => b.workerId === worker.id && b.status === 'completed').reduce((sum, b) => sum + b.amount, 0);
 
-  function handleStatusChange(bId: string, newStatus: string) {
+  function handleStatusChange(bId: string, newStatus: BookingStatus) { {
     dispatch({ type: 'UPDATE_BOOKING', payload: { id: bId, updates: { status: newStatus } } });
     toast(`Booking marked as ${statusLabels[newStatus]}`, 'success');
   }
@@ -37,7 +38,7 @@ export default function WorkerDashboard() {
   return (
     <div>
       <div className="page-header">
-        <h1>Good morning, {worker.name}</h1>
+        <h1>Good morning, {worker?.rating ?? 0} </h1>
         <p>Manage your jobs and earnings</p>
       </div>
 
@@ -58,7 +59,7 @@ export default function WorkerDashboard() {
         <div className="stat-card">
           <div className="stat-label">Rating</div>
           <div className="stat-value" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Star size={18} fill="#d97706" color="#d97706" /> {worker.rating}
+            <Star size={18} fill="#d97706" color="#d97706" /> {worker?.rating ?? 0}
           </div>
         </div>
       </div>
@@ -165,4 +166,5 @@ export default function WorkerDashboard() {
       </div>
     </div>
   );
+}
 }
